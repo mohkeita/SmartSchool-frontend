@@ -1,4 +1,50 @@
-<app-titre [titre]="titre"></app-titre>
-<ul>
-  <li *ngFor="let eleve of eleves">{{eleve.firstname}}</li>
-</ul>
+<div *ngIf="eleveSelected">
+  <div class="row">
+    <div class="mr-auto">
+      <app-titre [titre]="'Eleve:' + eleveSelected"></app-titre>
+    </div>
+    <div class="mt-1">
+      <button class="btn btn-warning" (click)="retour()">Listes d'élèves</button>
+    </div>
+  </div>
+
+  <form>
+    <div class="form-group">
+      <label for="formGroupExampleInput">Prenom</label>
+      <input type="text" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="formGroupExampleInput2">Nom de famille</label>
+      <input type="text" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="formGroupExampleInput2">Telephone</label>
+      <input type="text" class="form-control" >
+    </div>
+  </form>
+</div>
+
+<div *ngIf="!eleveSelected">
+  <app-titre [titre]="titre"></app-titre>
+
+  <table class="table table-hover">
+    <thead class="thead-light">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Prenom</th>
+      <th scope="col">Nom de famille</th>
+      <th scope="col">Telephone</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let eleve of eleves"
+        style="cursor: pointer" (click)="eleveSelect(eleve)">
+      <th scope="row">{{eleve.id}}</th>
+      <td>{{eleve.firstname}}</td>
+      <td>{{eleve.lastname}}</td>
+      <td>{{eleve.phone}}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
