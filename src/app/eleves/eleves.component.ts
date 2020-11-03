@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, TemplateRef} from '@angular/core';
+import {Eleve} from '../models/Eleve';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-eleves',
@@ -7,8 +10,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ElevesComponent implements OnInit {
 
+  public modalRef: BsModalRef;
+  public eleveForm: FormGroup;
   public titre = 'Elèves';
-  public eleveSelected: string;
+  public eleveSelected: Eleve;
+  public textSimple: string;
 
   public eleves = [
     { id: 1, firstname: 'Marta', lastname: 'Kent', phone: 33225555 },
@@ -20,17 +26,38 @@ export class ElevesComponent implements OnInit {
     { id: 7, firstname: 'Paulo', lastname: 'José', phone: 9874512 }
   ];
 
-  eleveSelect(eleve: any) {
-    this.eleveSelected = eleve.firstname;
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template);
   }
 
-  retour() {
-    this.eleveSelected = '';
+  constructor(private fb: FormBuilder,
+              private modalService: BsModalService) {
+    this.createForm();
   }
-
-  constructor() { }
 
   ngOnInit(): void {
   }
+
+  createForm() {
+    this.eleveForm = this.fb.group({
+      firstname: ['', Validators.required],
+      lastname: ['', Validators.required],
+      phone: ['', Validators.required]
+    });
+  }
+
+  eleveSubmit() {
+    console.log(this.eleveForm.value);
+  }
+
+  eleveSelect(eleve: Eleve) {
+    this.eleveSelected = eleve;
+    this.eleveForm.patchValue(eleve);
+  }
+
+  retour() {
+    this.eleveSelected = null;
+  }
+
 
 }

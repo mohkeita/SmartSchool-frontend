@@ -1,42 +1,66 @@
-<div *ngIf="profSelected">
-  <div class="row">
-    <div class="mr-auto">
-      <app-titre [titre]="'Enseignant: ' + profSelected"></app-titre>
+<div>
+  <div *ngIf="profSelected">
+    <div class="row">
+      <div class="mr-auto">
+        <app-titre [titre]="'Enseignant: ' + profSelected.id"></app-titre>
+      </div>
+      <div class="mt-1">
+        <button class="btn btn-warning" (click)="retour()">Listes des Enseignants</button>
+      </div>
     </div>
-    <div class="mt-1">
-      <button class="btn btn-warning" (click)="retour()">Listes des Enseignants</button>
-    </div>
+
+    <form>
+      <div class="form-group">
+        <label for="formGroupExampleInput">Prenom</label>
+        <input type="text" value="{{profSelected.firstname}}" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="formGroupExampleInput2">Matière</label>
+        <input type="text" value="{{profSelected.subject}}"  class="form-control">
+      </div>
+    </form>
   </div>
+  <div *ngIf="!profSelected">
+    <app-titre [titre]="titre"></app-titre>
 
-  <form>
-    <div class="form-group">
-      <label for="formGroupExampleInput">Prenom</label>
-      <input type="text" class="form-control">
-    </div>
-    <div class="form-group">
-      <label for="formGroupExampleInput2">Matière</label>
-      <input type="text" class="form-control">
-    </div>
-  </form>
+    <table class="table table-hover">
+      <thead class="thead-light">
+      <tr>
+        <th>Visualiser</th>
+        <th scope="col">#</th>
+        <th scope="col">Prenom</th>
+        <th scope="col">Matière</th>
+        <th scope="col">Options</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let prof of enseignats">
+        <td>
+          <button (click)="profSelect(prof)" class="text-dark btn btn-sm btn-outline-warning">Detail</button>
+        </td>
+        <th scope="row">{{prof.id}}</th>
+        <td>{{prof.firstname}}</td>
+        <td>{{prof.subject}}</td>
+        <td>
+          <div class="btn-group">
+            <button (click)="openModal(template)" class="btn btn-sm btn-outline-primary">Eleves</button>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
-<div *ngIf="!profSelected">
-  <app-titre [titre]="titre"></app-titre>
 
-  <table class="table table-hover">
-    <thead class="thead-light">
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Prenom</th>
-      <th scope="col">Matière</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let prof of enseignats"
-        style="cursor: pointer" (click)="profSelect(prof)">
-      <th scope="row">{{prof.id}}</th>
-      <td>{{prof.firstname}}</td>
-      <td>{{prof.subject}}</td>
-    </tr>
-    </tbody>
-  </table>
-</div>
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Modal</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+  </div>
+</ng-template>
