@@ -2,6 +2,7 @@ import {Component, OnInit, TemplateRef} from '@angular/core';
 import {Eleve} from '../models/Eleve';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import {EleveService} from './eleve.service';
 
 @Component({
   selector: 'app-eleves',
@@ -16,38 +17,56 @@ export class ElevesComponent implements OnInit {
   public eleveSelected: Eleve;
   public textSimple: string;
 
-  public eleves = [
-    { id: 1, firstname: 'Marta', lastname: 'Kent', phone: 33225555 },
-    { id: 2, firstname: 'Paula', lastname: 'Isabela', phone: 3354288 },
-    { id: 3, firstname: 'Laura', lastname: 'Antonia', phone: 55668899 },
-    { id: 4, firstname: 'Luiza', lastname: 'Maria', phone: 6565659 },
-    { id: 5, firstname: 'Lucas', lastname: 'Machado', phone: 565685415 },
-    { id: 6, firstname: 'Pedro', lastname: 'Alvares', phone: 456454545 },
-    { id: 7, firstname: 'Paulo', lastname: 'José', phone: 9874512 }
-  ];
+  public eleves: Eleve[];
 
   openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template);
   }
 
   constructor(private fb: FormBuilder,
-              private modalService: BsModalService) {
+              private modalService: BsModalService,
+              private eleveService: EleveService) {
     this.createForm();
   }
 
   ngOnInit(): void {
+    this.initEleves();
+  }
+
+  initEleves() {
+    this.eleveService.getAll().subscribe(
+      (eleves: Eleve[]) => {
+        this.eleves = eleves;
+      },
+      (error: any) => {
+        console.log(error);
+      }
+    );
   }
 
   createForm() {
     this.eleveForm = this.fb.group({
+      id: [''],
       firstname: ['', Validators.required],
       lastname: ['', Validators.required],
       phone: ['', Validators.required]
     });
   }
 
+  saveEleve(eleve: Eleve) {
+    this.eleveService.put(eleve.id, eleve).subscribe(
+      (retourne: Eleve) => {
+        console.log(retourne);
+        this.initEleves();
+      },
+      (error: any) => {
+        console.log(error);
+      }
+    );
+  }
+
   eleveSubmit() {
-    console.log(this.eleveForm.value);
+    this.saveEleve(this.eleveForm.value);
   }
 
   eleveSelect(eleve: Eleve) {
