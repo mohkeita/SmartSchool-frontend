@@ -1,5 +1,5 @@
 export class Enseignant {
   id: number;
-  firstname: string;
+  name: string;
   subject: string;
 }

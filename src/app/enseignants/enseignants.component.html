@@ -1,22 +1,20 @@
 <div>
   <div *ngIf="profSelected">
-    <div class="row">
-      <div class="mr-auto">
         <app-titre [titre]="'Enseignant: ' + profSelected.id"></app-titre>
-      </div>
-      <div class="mt-1">
-        <button class="btn btn-warning" (click)="retour()">Listes des Enseignants</button>
-      </div>
-    </div>
 
-    <form>
+
+    <form [formGroup]="teacherForm" (submit)="teacherSubmit()">
       <div class="form-group">
         <label for="formGroupExampleInput">Prenom</label>
-        <input type="text" value="{{profSelected.firstname}}" class="form-control">
+        <input type="text" formControlName="name" class="form-control">
       </div>
+<!--      <div class="form-group">-->
+<!--        <label for="formGroupExampleInput2">Matière</label>-->
+<!--        <input type="text" value="{{profSelected.subject}}"  class="form-control">-->
+<!--      </div>-->
       <div class="form-group">
-        <label for="formGroupExampleInput2">Matière</label>
-        <input type="text" value="{{profSelected.subject}}"  class="form-control">
+        <hr>
+        <button class="btn btn-success" [disabled]="!teacherForm.valid" >Soumettre</button>
       </div>
     </form>
   </div>
@@ -36,11 +34,11 @@
       <tbody>
       <tr *ngFor="let prof of enseignats">
         <td>
-          <button (click)="profSelect(prof)" class="text-dark btn btn-sm btn-outline-warning">Detail</button>
+          <button (click)="teacherSelect(prof)" class="text-dark btn btn-sm btn-outline-warning">Detail</button>
         </td>
         <th scope="row">{{prof.id}}</th>
-        <td>{{prof.firstname}}</td>
-        <td>{{prof.subject}}</td>
+        <td>{{prof.name}}</td>
+        <td>{{prof.subjects.name}}</td>
         <td>
           <div class="btn-group">
             <button (click)="openModal(template)" class="btn btn-sm btn-outline-primary">Eleves</button>
